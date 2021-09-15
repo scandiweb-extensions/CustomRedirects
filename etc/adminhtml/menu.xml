@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="ScandiPWA_CustomRedirects::redirects_menu" title="Redirects" module="ScandiPWA_CustomRedirects" sortOrder="10" parent="ScandiPWA_MenuOrganizer::navigation" action="scandipwa_customredirects/redirects/index" dependsOnModule="Scandiweb_Core" resource="ScandiPWA_CustomRedirects::redirects_menu"/>
+    </menu>
+</config>
