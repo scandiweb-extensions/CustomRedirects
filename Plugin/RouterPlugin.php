@@ -41,7 +41,7 @@ class RouterPlugin {
      */
     public function beforeMatch(Router $subject, RequestInterface $request)
     {
-        $requestPath = $request->getRequestString();
+        $requestPath = $request->getRequestUri();
         $redirects = $this->redirectsFactory->create();
         $match = $redirects->getCollection()->addFieldToFilter('from', ['eq'=> $requestPath])->getData();
 
