@@ -11,6 +11,7 @@
     "magento/module-ui": "*",
     "scandiweb/module-core": "~0.1.2"
   },
+  "version": "0.0.1",
   "autoload": {
     "files": [
       "registration.php"
