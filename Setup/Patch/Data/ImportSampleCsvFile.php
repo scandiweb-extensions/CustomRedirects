@@ -2,7 +2,7 @@
 
 namespace ScandiPWA\CustomRedirects\Setup\Patch\Data;
 
-use Eselo\Migration\Helper\MediaMigration;
+use Scandiweb\Migration\Helper\MediaMigration;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
