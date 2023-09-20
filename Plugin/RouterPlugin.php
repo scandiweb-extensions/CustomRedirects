@@ -45,7 +45,14 @@ class RouterPlugin {
         $redirects = $this->redirectsFactory->create();
         $match = $redirects->getCollection()->addFieldToFilter('from', ['eq'=> $requestPath])->getData();
 
-        if(count($match)) {
+        if (!count($match)) {
+            $urlComponents = parse_url($requestPath);
+            $filteredURL = $urlComponents['path'];
+
+            $match = $redirects->getCollection()->addFieldToFilter('from', ['eq' => $filteredURL])->getData();
+        }
+
+        if (count($match)) {
             $this->responseFactory->create()->setRedirect($match[0]['to'], 301)->sendResponse();
             exit;
         }
