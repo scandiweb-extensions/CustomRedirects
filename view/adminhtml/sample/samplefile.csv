@@ -1,4 +1,4 @@
-from,to
-/is-akim?beautiful,/of-course
-/redirect-me,/to-akim
-/send-me-cb?please,/ok
+from,to,is_regex
+/is-akim?beautiful,/of-course,1
+/redirect-me,/to-akim,0
+/send-me-cb?please,/ok,0

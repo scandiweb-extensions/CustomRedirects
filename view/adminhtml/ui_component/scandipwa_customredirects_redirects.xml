@@ -111,5 +111,13 @@
                 </item>
             </argument>
         </column>
+
+        <column name="is_regex">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Is a regular expression</item>
+                </item>
+            </argument>
+        </column>
     </columns>
 </listing>

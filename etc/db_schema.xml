@@ -12,5 +12,6 @@
     <table name="scandipwa_redirects">
         <column xsi:type="varchar" length="1024" name="from" comment="Redirect From"/>
         <column xsi:type="varchar" length="1024" name="to" comment="Redirect To"/>
+        <column xsi:type="boolean"  name="is_regex" nullable="true" comment="Is a regex redirect"/>
     </table>
 </schema>
