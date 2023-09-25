@@ -1,4 +1,5 @@
 <?php
+
 namespace ScandiPWA\CustomRedirects\Controller\Adminhtml\Redirects;
 
 use Magento\Backend\App\Action;
@@ -27,7 +28,8 @@ class Save extends Action
         if (!isset($arr['id'])) {
             $data = [
                 "from" => $arr['from'],
-                "to" => $arr['to']
+                "to" => $arr['to'],
+                "is_regex" => $arr['is_regex']
             ];
             $this->RedirectsFactory->create()
                 ->setData($data)->save();
@@ -35,10 +37,10 @@ class Save extends Action
             $data = [
                 'id' => $arr['id'],
                 "from" => $arr['from'],
-                "to" => $arr['to']
+                "to" => $arr['to'],
+                "is_regex" => $arr['is_regex']
             ];
             $this->RedirectsFactory->create()->setData($data)->save();
-
         }
         return $this->resultRedirectFactory->create()->setPath('scandipwa_customredirects/redirects/index');
     }

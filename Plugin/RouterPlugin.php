@@ -5,19 +5,27 @@ namespace ScandiPWA\CustomRedirects\Plugin;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseFactory;
-use ScandiPWA\CustomRedirects\Model\RedirectsFactory;
-use ScandiPWA\Router\Controller\Pwa;
+use ScandiPWA\CustomRedirects\Model\ResourceModel\Redirects\CollectionFactory as RedirectCollectionFactory;
 use ScandiPWA\Router\Controller\Router;
 
-class RouterPlugin {
+class RouterPlugin
+{
+    const IS_REGEX = 'is_regex';
+
     /**
-     * @var RedirectsFactory
+     * @var RedirectCollectionFactory
      */
-    protected $redirectsFactory;
+    protected $redirectCollectionFactory;
+
     /**
      * @var Redirect
      */
     protected $redirect;
+
+    /**
+     * @var ResponseFactory
+     */
+    protected $responseFactory;
 
     /**
      * @var \Magento\Framework\App\ResponseFactory
@@ -27,11 +35,11 @@ class RouterPlugin {
     public function __construct(
         Redirect $redirect,
         ResponseFactory $responseFactory,
-        RedirectsFactory $redirectsFactory
-    ){
+        RedirectCollectionFactory $redirectCollectionFactory
+    ) {
         $this->redirect = $redirect;
         $this->responseFactory = $responseFactory;
-        $this->redirectsFactory = $redirectsFactory;
+        $this->redirectCollectionFactory = $redirectCollectionFactory;
     }
 
     /**
@@ -42,14 +50,37 @@ class RouterPlugin {
     public function beforeMatch(Router $subject, RequestInterface $request)
     {
         $requestPath = $request->getRequestUri();
-        $redirects = $this->redirectsFactory->create();
-        $match = $redirects->getCollection()->addFieldToFilter('from', ['eq'=> $requestPath])->getData();
+        $redirectsCollection = $this->redirectCollectionFactory->create();
+        $match = $redirectsCollection->addFieldToFilter('from', ['eq' => $requestPath])->getData();
 
         if (!count($match)) {
             $urlComponents = parse_url($requestPath);
             $filteredURL = $urlComponents['path'];
 
-            $match = $redirects->getCollection()->addFieldToFilter('from', ['eq' => $filteredURL])->getData();
+            $match = $redirectsCollection->addFieldToFilter('from', ['eq' => $filteredURL])->getData();
+        }
+
+        if (!count($match)) {
+            /**
+             * $collection->clear() will reset data in the collection, but
+             * it won't reset the underlying SQL query modifications we made using addFieldToFilter
+             */
+            $redirectsCollection = $this->redirectCollectionFactory->create();
+            $redirectsCollection->getSelect()
+                ->where(
+                    '"' . $requestPath  . '"' . ' REGEXP main_table.from'
+                )->where(
+                    self::IS_REGEX . " = " . true
+                );
+
+            $match = $redirectsCollection->getData();
+
+            if (count($match)) {
+                $destination = preg_replace('/' . $match[0]['from'] . '/',  $match[0]['to'], $requestPath);
+
+                $this->responseFactory->create()->setRedirect($destination, 301)->sendResponse();
+                exit;
+            }
         }
 
         if (count($match)) {

@@ -77,10 +77,8 @@ class BulkSave extends Action
 
     public function execute()
     {
-        if ( (isset($_FILES['importdata']['name'])) && ($_FILES['importdata']['name'] != '') )
-        {
-            try
-            {
+        if ((isset($_FILES['importdata']['name'])) && ($_FILES['importdata']['name'] !== '')) {
+            try {
                 $uploaderFactory = $this->uploaderFactory->create(['fileId' => 'importdata']);
                 $uploaderFactory->setAllowedExtensions(['csv', 'xls']);
                 $uploaderFactory->setAllowRenameFiles(true);
@@ -91,16 +89,12 @@ class BulkSave extends Action
 
                 $result = $uploaderFactory->save($destinationPath);
 
-                if (!$result)
-                {
-                    throw new LocalizedException
-                    (
+                if (!$result) {
+                    throw new LocalizedException(
                         __('File cannot be saved to path: $1', $destinationPath)
                     );
-                }
-                else
-                {
-                    $imagePath = 'ScandiPWA_CustomRedirects'.$result['file'];
+                } else {
+                    $imagePath = 'ScandiPWA_CustomRedirects' . $result['file'];
                     $mediaDirectory = $this->fileSystem->getDirectoryRead(DirectoryList::MEDIA);
                     $destinationfilePath = $mediaDirectory->getAbsolutePath($imagePath);
 
@@ -108,22 +102,23 @@ class BulkSave extends Action
                     $f_object = fopen($destinationfilePath, "r");
                     $column = fgetcsv($f_object);;
 
-                    if($f_object)
-                    {
-                        if( ($column[0] == 'from') && ($column[1] == 'to') )
-                        {
+                    if ($f_object) {
+                        if (($column[0] == 'from')
+                            && ($column[1] == 'to')
+                            && ($column[2] == 'is_regex')
+                        ) {
                             $redirects = $this->redirectsFactory->create();
                             $count = 0;
                             $duplicates = 0;
 
-                            while (($columns = fgetcsv($f_object)) !== FALSE)
-                            {
-                                $duplicate = $redirects->getCollection()->addFieldToFilter('from', ['eq'=> $columns[0]])->getData();
+                            while (($columns = fgetcsv($f_object)) !== FALSE) {
+                                $duplicate = $redirects->getCollection()->addFieldToFilter('from', ['eq' => $columns[0]])->getData();
 
-                                if(!count($duplicate)) {
+                                if (!count($duplicate)) {
                                     $data = [
                                         "from" => $columns[0],
-                                        "to" => $columns[1]
+                                        "to" => $columns[1],
+                                        "is_regex" => $columns[2]
                                     ];
                                     $redirects->setData($data)->save();
                                     $count++;
@@ -134,32 +129,20 @@ class BulkSave extends Action
 
                             $this->messageManager->addSuccess(__('A total of %1 record(s) have been Added. Duplicates %2', $count, $duplicates));
                             $this->_redirect('scandipwa_customredirects/redirects/index');
-                        }
-                        else
-                        {
+                        } else {
                             $this->messageManager->addError(__("invalid Formated File"));
                             $this->_redirect('scandipwa_customredirects/redirects/index');
                         }
-
-                    }
-                    else
-                    {
+                    } else {
                         $this->messageManager->addError(__("File hase been empty"));
                         $this->_redirect('scandipwa_customredirects/redirects/index');
                     }
-
                 }
-
-            }
-            catch (\Exception $e)
-            {
+            } catch (\Exception $e) {
                 $this->messageManager->addError(__($e->getMessage()));
                 $this->_redirect('scandipwa_customredirects/redirects/index');
             }
-
-        }
-        else
-        {
+        } else {
             $this->messageManager->addError(__("Please try again."));
             $this->_redirect('[scandipwa_customredirects/redirects/index');
         }
