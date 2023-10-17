@@ -10,6 +10,7 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="scandipwa_redirects">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
         <column xsi:type="varchar" length="1024" name="from" comment="Redirect From"/>
         <column xsi:type="varchar" length="1024" name="to" comment="Redirect To"/>
         <column xsi:type="boolean"  name="is_regex" nullable="true" comment="Is a regex redirect"/>

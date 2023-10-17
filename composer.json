@@ -12,7 +12,7 @@
     "scandiweb/module-core": "~0.1.2",
     "scandiweb/module-migration": "^1.0"
   },
-  "version": "0.0.3",
+  "version": "0.0.4",
   "autoload": {
     "files": [
       "registration.php"
