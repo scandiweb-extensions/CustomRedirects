@@ -1,0 +1,15 @@
+{
+    "scandipwa_redirects": {
+        "column": {
+            "id": true,
+            "redirect_from": true,
+            "redirect_to": true,
+            "is_regex": true,
+            "from": false,
+            "to": false
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

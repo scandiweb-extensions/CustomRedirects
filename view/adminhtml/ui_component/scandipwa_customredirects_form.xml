@@ -44,7 +44,7 @@
                 <item name="label" xsi:type="string" translate="true">General</item>
             </item>
         </argument>
-        <field name="from">
+        <field name="redirect_from">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="label" xsi:type="string" translate="true">Redirect From</item>
@@ -56,7 +56,7 @@
                 </item>
             </argument>
         </field>
-        <field name="to">
+        <field name="redirect_to">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="label" xsi:type="string" translate="true">Redirect To</item>

@@ -49,42 +49,54 @@ class RouterPlugin
      */
     public function beforeMatch(Router $subject, RequestInterface $request)
     {
+        // Match the entire path with params
         $requestPath = $request->getRequestUri();
         $redirectsCollection = $this->redirectCollectionFactory->create();
-        $match = $redirectsCollection->addFieldToFilter('from', ['eq' => $requestPath])->getData();
+        $match = $redirectsCollection->addFieldToFilter('redirect_from', ['eq' => $requestPath])->getData();
+        $pathOnly = $request->getPathInfo();
 
+        // If it fails to match the entire url, try to match the path only
         if (!count($match)) {
-            $urlComponents = parse_url($requestPath);
-            $filteredURL = $urlComponents['path'];
-
-            $match = $redirectsCollection->addFieldToFilter('from', ['eq' => $filteredURL])->getData();
+            $match = $redirectsCollection->addFieldToFilter('redirect_from', ['eq' => $pathOnly])->getData();
         }
 
+        // If it fails to do that, try to match using regex
         if (!count($match)) {
-            /**
-             * $collection->clear() will reset data in the collection, but
-             * it won't reset the underlying SQL query modifications we made using addFieldToFilter
-             */
-            $redirectsCollection = $this->redirectCollectionFactory->create();
-            $redirectsCollection->getSelect()
-                ->where(
-                    '"' . $requestPath  . '"' . ' REGEXP main_table.from'
-                )->where(
-                    self::IS_REGEX . " = " . true
-                );
-
-            $match = $redirectsCollection->getData();
-
-            if (count($match)) {
-                $destination = preg_replace('/' . $match[0]['from'] . '/',  $match[0]['to'], $requestPath);
-
-                $this->responseFactory->create()->setRedirect($destination, 301)->sendResponse();
-                exit;
-            }
+            $this->performRegexMatch($requestPath);
         }
 
         if (count($match)) {
-            $this->responseFactory->create()->setRedirect($match[0]['to'], 301)->sendResponse();
+            $this->responseFactory->create()->setRedirect($match[0]['redirect_to'], 301)->sendResponse();
+            exit;
+        }
+    }
+
+    /**
+     * Performs regex redirect if regex match found
+     *
+     * @param string $path
+     * @return void
+     */
+    public function performRegexMatch(string $path)
+    {
+        /**
+         * $collection->clear() will reset data in the collection, but
+         * it won't reset the underlying SQL query modifications we made using addFieldToFilter
+         */
+        $redirectsCollection = $this->redirectCollectionFactory->create();
+        $redirectsCollection->getSelect()
+            ->where(
+                '"' . $path  . '"' . ' REGEXP main_table.redirect_from'
+            )->where(
+                self::IS_REGEX . " = " . true
+            );
+
+        $match = $redirectsCollection->getData();
+
+        if (count($match)) {
+            $destination = preg_replace('/' . ltrim($match[0]['redirect_from'], '/') . '/',  $match[0]['redirect_to'], ltrim($path, '/'));
+
+            $this->responseFactory->create()->setRedirect($destination, 301)->sendResponse();
             exit;
         }
     }

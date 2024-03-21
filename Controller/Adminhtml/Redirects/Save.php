@@ -27,8 +27,8 @@ class Save extends Action
         $arr = $_POST['general'];
         if (!isset($arr['id'])) {
             $data = [
-                "from" => $arr['from'],
-                "to" => $arr['to'],
+                "redirect_from" => $arr['redirect_from'],
+                "redirect_to" => $arr['redirect_to'],
                 "is_regex" => $arr['is_regex']
             ];
             $this->RedirectsFactory->create()
@@ -36,8 +36,8 @@ class Save extends Action
         } else {
             $data = [
                 'id' => $arr['id'],
-                "from" => $arr['from'],
-                "to" => $arr['to'],
+                "redirect_from" => $arr['redirect_from'],
+                "redirect_to" => $arr['redirect_to'],
                 "is_regex" => $arr['is_regex']
             ];
             $this->RedirectsFactory->create()->setData($data)->save();

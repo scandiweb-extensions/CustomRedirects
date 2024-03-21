@@ -112,12 +112,12 @@ class BulkSave extends Action
                             $duplicates = 0;
 
                             while (($columns = fgetcsv($f_object)) !== FALSE) {
-                                $duplicate = $redirects->getCollection()->addFieldToFilter('from', ['eq' => $columns[0]])->getData();
+                                $duplicate = $redirects->getCollection()->addFieldToFilter('redirect_from', ['eq' => $columns[0]])->getData();
 
                                 if (!count($duplicate)) {
                                     $data = [
-                                        "from" => $columns[0],
-                                        "to" => $columns[1],
+                                        "redirect_from" => $columns[0],
+                                        "redirect_to" => $columns[1],
                                         "is_regex" => $columns[2]
                                     ];
                                     $redirects->setData($data)->save();
