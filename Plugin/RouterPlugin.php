@@ -94,7 +94,9 @@ class RouterPlugin
         $match = $redirectsCollection->getData();
 
         if (count($match)) {
-            $destination = preg_replace('/' . ltrim($match[0]['redirect_from'], '/') . '/',  $match[0]['redirect_to'], ltrim($path, '/'));
+            $plainFrom = ltrim($match[0]['redirect_from'], '/');
+            $cleanFrom = preg_replace('/\//', '\/', $plainFrom);
+            $destination = preg_replace('/' . $cleanFrom . '/',  $match[0]['redirect_to'], ltrim($path, '/'));
 
             $this->responseFactory->create()->setRedirect($destination, 301)->sendResponse();
             exit;
