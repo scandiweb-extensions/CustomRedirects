@@ -2,9 +2,5 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="ScandiPWA_CustomRedirects" setup_version="0.0.6">
-        <sequence>
-            <module name="ScandiPWA_Route717"/>
-        </sequence>
-    </module>
+    <module name="ScandiPWA_CustomRedirects" setup_version="0.0.7"/>
 </config>

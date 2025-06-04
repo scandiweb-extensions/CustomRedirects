@@ -6,7 +6,7 @@ use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseFactory;
 use ScandiPWA\CustomRedirects\Model\ResourceModel\Redirects\CollectionFactory as RedirectCollectionFactory;
-use ScandiPWA\Router\Controller\Router;
+use Magento\Framework\App\RouterInterface as Router;
 
 class RouterPlugin
 {
@@ -53,7 +53,7 @@ class RouterPlugin
         $requestPath = $request->getRequestUri();
         $redirectsCollection = $this->redirectCollectionFactory->create();
         $match = $redirectsCollection->addFieldToFilter('redirect_from', ['eq' => $requestPath])->getData();
-        $pathOnly = $request->getPathInfo();
+        $pathOnly = ltrim($request->getPathInfo(), '/');
 
         // If it fails to match the entire url, try to match the path only
         if (!count($match)) {

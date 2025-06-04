@@ -14,7 +14,8 @@
             <argument name="resourceModel" xsi:type="string">ScandiPWA\CustomRedirects\Model\ResourceModel\Redirects</argument>
         </arguments>
     </virtualType>
-    <type name="ScandiPWA\Router\Controller\Router">
-        <plugin name="ScandiPWA_Router_Plugin" type="ScandiPWA\CustomRedirects\Plugin\RouterPlugin" sortOrder="10" disabled="false"  />
+
+    <type name="Magento\Framework\App\RouterInterface">
+        <plugin name="ScandiPWA_Router_Plugin" type="ScandiPWA\CustomRedirects\Plugin\RouterPlugin" sortOrder="10" disabled="false" />
     </type>
 </config>
