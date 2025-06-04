@@ -1,24 +1,24 @@
 {
-  "name": "scandipwa/custom-redirects",
-  "description": "ScandiPWA Custom Redirects",
-  "type": "magento2-module",
-  "license": [
-    "OSL-3.0"
-  ],
-  "require": {
-    "magento/framework": "*",
-    "magento/module-media-storage": "*",
-    "magento/module-ui": "*",
-    "scandiweb/module-core": "~0.1.2",
-    "scandiweb/module-migration": "^1.0"
-  },
-  "version": "0.0.6",
-  "autoload": {
-    "files": [
-      "registration.php"
+    "name": "scandipwa/custom-redirects",
+    "description": "ScandiPWA Custom Redirects",
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0"
     ],
-    "psr-4": {
-      "ScandiPWA\\CustomRedirects\\": ""
+    "require": {
+        "magento/framework": "*",
+        "magento/module-media-storage": "*",
+        "magento/module-ui": "*",
+        "scandiweb/module-core": "~0.1.2",
+        "scandiweb/module-migration": "^1.0"
+    },
+    "version": "0.0.7",
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "ScandiPWA\\CustomRedirects\\": ""
+        }
     }
-  }
 }
